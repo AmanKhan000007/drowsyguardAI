@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}Contact - DrowsyGuard AI{% endblock %}
+
+{% block content %}
+<section class="min-h-[80vh] relative overflow-hidden bg-gradient-to-br from-[#0b1020] via-[#1b1e3a] to-[#2b1f4a]">
+  <!-- subtle animated blobs -->
+  <div class="absolute -top-24 -right-24 w-80 h-80 bg-cyan-500/10 blur-3xl rounded-full"></div>
+  <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 blur-3xl rounded-full"></div>
+
+  <div class="container mx-auto px-4 py-12 relative z-10">
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+        Get in touch
+      </h1>
+      <p class="text-gray-300 mt-2">
+        Questions, feedback, or ideas? We’d love to hear from you.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Contact info cards -->
+      <div class="lg:col-span-1 space-y-6">
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+          <div class="flex items-start">
+            <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center mr-3">
+              <i class="fas fa-phone text-cyan-400"></i>
+            </div>
+            <div>
+              <h3 class="text-white font-semibold">Phone</h3>
+              <p class="text-gray-300 text-sm">9844522527</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+          <div class="flex items-start">
+            <div class="w-10 h-10 rounded-lg bg-violet-500/20 flex items-center justify-center mr-3">
+              <i class="fas fa-envelope text-violet-400"></i>
+            </div>
+            <div>
+              <h3 class="text-white font-semibold">Email</h3>
+              <p class="text-gray-300 text-sm">supportdrow@gmail.com</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+          <div class="flex items-start">
+            <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center mr-3">
+              <i class="fas fa-location-dot text-amber-400"></i>
+            </div>
+            <div>
+              <h3 class="text-white font-semibold">Office</h3>
+              <p class="text-gray-300 text-sm">Ballari</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact form -->
+      <div class="lg:col-span-2">
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+          <form method="POST" action="{{ url_for('contact') }}" class="space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm text-gray-300 mb-1">Your name</label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  value="{{ request.form.get('name','') }}"
+                  placeholder="Jane Doe"
+                  class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400" />
+              </div>
+
+              <div>
+                <label class="block text-sm text-gray-300 mb-1">Mobile</label>
+                <input
+                  type="tel"
+                  name="mobile"
+                  required
+                  value="{{ request.form.get('mobile','') }}"
+                  placeholder="+1 000 123 4567"
+                  class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm text-gray-300 mb-1">Message</label>
+              <textarea
+                name="message"
+                rows="6"
+                required
+                placeholder="Tell us how we can help…"
+                class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400">{{ request.form.get('message','') }}</textarea>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <p class="text-gray-400 text-sm">We usually reply within 1–2 business days.</p>
+              <button
+                type="submit"
+                class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-all">
+                Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Optional map/embed area -->
+        <!--
+        <div class="mt-6 bg-white/10 backdrop-blur-lg rounded-xl p-3 border border-white/20">
+          <div class="aspect-[16/9] w-full rounded-lg bg-black/30"></div>
+        </div>
+        -->
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  // WhatsApp redirect on contact form submit
+  (function () {
+    // Your base number (as you provided)
+    const RAW_NUMBER = "9844522527";
+    // Default country code; change if needed
+    const DEFAULT_COUNTRY_CODE = "91";
+
+    // Normalize number to international format for wa.me
+    function normalizeNumber(raw) {
+      const digits = (raw || "").replace(/\D/g, "");
+      // If already looks like an intl number (>=11 digits), use as-is
+      if (digits.length >= 11) return digits;
+      // Otherwise, prepend country code
+      return DEFAULT_COUNTRY_CODE + digits;
+    }
+
+    const PHONE = normalizeNumber(RAW_NUMBER);
+
+    // Hook the form submit
+    const form = document.querySelector('form[action="{{ url_for("contact") }}"]') 
+              || document.querySelector('form[method="POST"]')
+              || document.querySelector("form");
+    if (!form) return;
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault(); // don't post to server; open WhatsApp instead
+
+      // Grab fields by name (as in your route: name, mobile, message)
+      const name    = (form.querySelector('[name="name"]')    || {}).value || "";
+      const mobile  = (form.querySelector('[name="mobile"]')  || {}).value || "";
+      const message = (form.querySelector('[name="message"]') || {}).value || "";
+
+      // Build text
+      // You asked for "their name and message"; mobile is included but optional—remove that line if you don’t need it.
+      const text = [
+        `Name: ${name}`,
+        mobile ? `Mobile: ${mobile}` : null,
+        "",
+        message
+      ].filter(Boolean).join("\n");
+
+      const url = `https://wa.me/${PHONE}?text=${encodeURIComponent(text)}`;
+
+      // Open WhatsApp (Web or app)
+      window.open(url, "_blank");
+
+      // If you ALSO want to keep your backend flash (“Your message has been sent!”)
+      // you can submit after opening WhatsApp (uncomment next two lines):
+      // setTimeout(() => form.submit(), 500);
+    });
+  })();
+</script>
+
+{% endblock %}

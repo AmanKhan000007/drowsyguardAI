@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - AI Drowsiness Detection System{% endblock %}
+
+{% block content %}
+<!-- Added animated background and enhanced settings styling -->
+<div class="relative overflow-hidden min-h-screen">
+    <!-- Animated background elements -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-40 right-40 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-40 left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-4xl relative z-10">
+        <!-- Enhanced header with gradient text -->
+        <div class="text-center mb-8">
+            <h1 class="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-2">
+                <i class="fas fa-cog mr-3 text-cyan-400"></i>Settings
+            </h1>
+            <p class="text-gray-300 text-lg">Configure your drowsiness detection preferences</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Enhanced detection settings with glass morphism -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+                <h3 class="text-xl font-semibold mb-6 flex items-center text-white">
+                    <i class="fas fa-eye mr-2 text-blue-400"></i>Detection Settings
+                </h3>
+                
+                <form id="detectionSettingsForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Alert Threshold (seconds)</label>
+                        <input type="range" id="alertThresholdSetting" min="1" max="10" value="5" class="w-full accent-cyan-500">
+                        <div class="flex justify-between text-sm text-gray-400 mt-1">
+                            <span>1s</span>
+                            <span id="alertThresholdValue" class="text-cyan-400 font-medium">5s</span>
+                            <span>10s</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-2">Time before triggering drowsiness alert</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">EAR Threshold</label>
+                        <input type="range" id="earThresholdSetting" min="0.15" max="0.30" step="0.01" value="0.22" class="w-full accent-cyan-500">
+                        <div class="flex justify-between text-sm text-gray-400 mt-1">
+                            <span>0.15</span>
+                            <span id="earThresholdValue" class="text-cyan-400 font-medium">0.22</span>
+                            <span>0.30</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-2">Eye aspect ratio threshold for closed eyes</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Detection Sensitivity</label>
+                        <select id="sensitivitySetting" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            <option value="low" class="bg-gray-800">Low - Less sensitive</option>
+                            <option value="medium" selected class="bg-gray-800">Medium - Balanced</option>
+                            <option value="high" class="bg-gray-800">High - More sensitive</option>
+                        </select>
+                        <p class="text-sm text-gray-400 mt-2">Overall sensitivity of the detection system</p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Enhanced alert settings -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+                <h3 class="text-xl font-semibold mb-6 flex items-center text-white">
+                    <i class="fas fa-bell mr-2 text-yellow-400"></i>Alert Settings
+                </h3>
+                
+                <form id="alertSettingsForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Alert Volume</label>
+                        <input type="range" id="alertVolumeSetting" min="0" max="100" value="70" class="w-full accent-yellow-500">
+                        <div class="flex justify-between text-sm text-gray-400 mt-1">
+                            <span>0%</span>
+                            <span id="alertVolumeValue" class="text-yellow-400 font-medium">70%</span>
+                            <span>100%</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                            <span class="text-sm text-gray-300">Sound Alerts</span>
+                            <input type="checkbox" id="soundEnabledSetting" checked class="w-4 h-4 accent-yellow-500">
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                            <span class="text-sm text-gray-300">Visual Alerts</span>
+                            <input type="checkbox" id="visualEnabledSetting" checked class="w-4 h-4 accent-yellow-500">
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                            <span class="text-sm text-gray-300">Vibration (if supported)</span>
+                            <input type="checkbox" id="vibrationEnabledSetting" class="w-4 h-4 accent-yellow-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="button" id="testAlertBtn" class="w-full bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white py-2 rounded-lg transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-bell mr-2"></i>Test Alert
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Enhanced camera settings -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+                <h3 class="text-xl font-semibold mb-6 flex items-center text-white">
+                    <i class="fas fa-camera mr-2 text-green-400"></i>Camera Settings
+                </h3>
+                
+                <form id="cameraSettingsForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Camera Resolution</label>
+                        <select id="resolutionSetting" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="640x480" selected class="bg-gray-800">640x480 (Standard)</option>
+                            <option value="1280x720" class="bg-gray-800">1280x720 (HD)</option>
+                            <option value="1920x1080" class="bg-gray-800">1920x1080 (Full HD)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Frame Rate</label>
+                        <select id="frameRateSetting" class="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="15" class="bg-gray-800">15 FPS</option>
+                            <option value="30" selected class="bg-gray-800">30 FPS</option>
+                            <option value="60" class="bg-gray-800">60 FPS</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                            <span class="text-sm text-gray-300">Show Face Mesh</span>
+                            <input type="checkbox" id="showMeshSetting" checked class="w-4 h-4 accent-green-500">
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                            <span class="text-sm text-gray-300">Mirror Camera</span>
+                            <input type="checkbox" id="mirrorCameraSetting" checked class="w-4 h-4 accent-green-500">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Enhanced data & privacy settings -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+                <h3 class="text-xl font-semibold mb-6 flex items-center text-white">
+                    <i class="fas fa-shield-alt mr-2 text-purple-400"></i>Data & Privacy
+                </h3>
+                
+                <div class="space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                            <span class="text-sm text-gray-300">Save Session Data</span>
+                            <input type="checkbox" id="saveDataSetting" checked class="w-4 h-4 accent-purple-500">
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                            <span class="text-sm text-gray-300">Auto Export Logs</span>
+                            <input type="checkbox" id="autoExportSetting" class="w-4 h-4 accent-purple-500">
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                            <span class="text-sm text-gray-300">Anonymous Analytics</span>
+                            <input type="checkbox" id="analyticsSetting" checked class="w-4 h-4 accent-purple-500">
+                        </div>
+                    </div>
+
+                    <div class="border-t border-white/20 pt-4 space-y-3">
+                        <button type="button" id="clearDataBtn" class="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white py-2 rounded-lg transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-trash mr-2"></i>Clear All Data
+                        </button>
+                        <button type="button" id="exportAllBtn" class="w-full bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg transition-all duration-200 border border-white/20">
+                            <i class="fas fa-download mr-2"></i>Export All Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced save settings button -->
+        <div class="mt-8 text-center">
+            <button type="button" id="saveSettingsBtn" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-8 py-3 text-lg rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+                <i class="fas fa-save mr-2"></i>Save All Settings
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static_files', filename='js/settings.jsx') }}"></script>
+ <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}

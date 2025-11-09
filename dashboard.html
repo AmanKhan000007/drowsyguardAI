@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AI Drowsiness Detection System{% endblock %}
+
+{% block extra_head %}
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+<link rel="stylesheet" href="/static/css/styles.css">
+<link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+  
+
+{% endblock %}
+
+{% block content %}
+<!-- Added animated background and enhanced dashboard styling -->
+<div class="relative overflow-hidden min-h-screen">
+    <!-- Animated background elements -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-20 right-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 left-20 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 relative z-10">
+        <!-- Enhanced header with gradient text -->
+        <div class="text-center mb-8">
+            <h1 class="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                <i class="fas fa-eye mr-3 text-cyan-400"></i>Detection Dashboard
+            </h1>
+            <p class="text-gray-300 text-lg">Real-time monitoring with smart alerts</p>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Enhanced camera feed with glass morphism -->
+            <div class="lg:col-span-2">
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center text-white">
+                        <i class="fas fa-video mr-2 text-green-400"></i>Live Camera Feed
+                    </h2>
+                    <div class="relative">
+                        <video id="videoElement" class="w-full rounded-lg bg-black shadow-lg" autoplay playsinline muted></video>
+                        <canvas id="canvasElement" class="absolute top-0 left-0 w-full h-full rounded-lg"></canvas>
+                        
+                        <!-- Enhanced status overlay with glass morphism -->
+                        <div class="absolute top-4 left-4 bg-black/50 backdrop-blur-lg rounded-lg p-3 border border-white/20">
+                            <div class="flex items-center mb-2">
+                                <div id="statusIndicator" class="w-3 h-3 rounded-full bg-green-400 mr-2 animate-pulse"></div>
+                                <span id="statusText" class="text-sm font-medium text-white">System Ready</span>
+                            </div>
+                            <div class="text-xs text-gray-300">
+                                <div>EAR: <span id="earValue" class="text-cyan-300 font-mono">0.000</span></div>
+                                <div>Eyes Closed: <span id="eyesClosedTime" class="text-yellow-300 font-mono">0.0s</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced alert overlay -->
+                        <div id="alertOverlay" class="absolute inset-0 bg-red-500/30 backdrop-blur-sm rounded-lg hidden animate-pulse">
+                            <div class="flex items-center justify-center h-full">
+                                <div class="bg-red-600/90 backdrop-blur-lg text-white px-6 py-3 rounded-lg text-xl font-bold border border-red-400/50 shadow-xl">
+                                    <i class="fas fa-exclamation-triangle mr-2 animate-bounce"></i>DROWSINESS ALERT!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced controls with gradient buttons -->
+                    <div class="flex justify-center mt-4 space-x-4">
+                        <button id="startBtn" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 px-6 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-play mr-2"></i>Start Detection
+                        </button>
+                        <button id="stopBtn" class="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 px-6 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg" disabled>
+                            <i class="fas fa-stop mr-2"></i>Stop Detection
+                        </button>
+                        <button id="calibrateBtn" class="bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 px-6 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-cog mr-2"></i>Calibrate
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced statistics panel with glass morphism -->
+            <div class="space-y-6">
+                <!-- Real-time Stats -->
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center text-white">
+                        <i class="fas fa-chart-line mr-2 text-blue-400"></i>Session Statistics
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-300">Session Duration:</span>
+                            <span id="sessionDuration" class="text-green-400 font-mono">00:00:00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-300">Alert Count:</span>
+                            <span id="alertCount" class="text-red-400 font-bold">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-300">Drowsiness Score:</span>
+                            <span id="drowsinessScore" class="text-yellow-400 font-bold">0%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-300">Avg EAR:</span>
+                            <span id="avgEAR" class="text-blue-400 font-mono">0.000</span>
+                            <br>
+                            <span class="text-gray-300">Eye Blinks:</span>
+                            <span id="blinkCount" class="text-cyan-400 font-bold">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced settings panel -->
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center text-white">
+                        <i class="fas fa-sliders-h mr-2 text-purple-400"></i>Settings
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">Alert Threshold (seconds)</label>
+                            <input id="alertThreshold" type="range" min="1" max="10" value="5" class="w-full accent-cyan-500">
+                            <span id="thresholdValue" class="text-xs text-gray-400">5 seconds</span>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">EAR Threshold</label>
+                            <input id="earThreshold" type="range" min="0.15" max="0.30" step="0.01" value="0.22" class="w-full accent-cyan-500">
+                            <span id="earThresholdValue" class="text-xs text-gray-400">0.22</span>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">Alert Volume</label>
+                            <input id="alertVolume" type="range" min="0" max="100" value="70" class="w-full accent-cyan-500">
+                            <span id="volumeValue" class="text-xs text-gray-400">70%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-300">Sound Alerts</span>
+                            <input id="soundEnabled" type="checkbox" checked class="w-4 h-4 accent-cyan-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced quick actions -->
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center text-white">
+                        <i class="fas fa-bolt mr-2 text-yellow-400"></i>Quick Actions
+                    </h3>
+                    <div class="space-y-2">
+                        <button id="resetStatsBtn" class="w-full bg-white/10 hover:bg-white/20 py-2 rounded transition-all duration-200 border border-white/20 text-white">
+                            <i class="fas fa-refresh mr-2"></i>Reset Statistics
+                        </button>
+                        <button id="testAlertBtn" class="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 py-2 rounded transition-all duration-200 text-white">
+                            <i class="fas fa-bell mr-2"></i>Test Alert
+                        </button>
+                        <button id="exportLogBtn" class="w-full bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 py-2 rounded transition-all duration-200 text-white">
+                            <i class="fas fa-download mr-2"></i>Export Log
+                        </button>
+                        <button id="saveSessionBtn" class="w-full bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 py-2 rounded transition-all duration-200 text-white">
+                            <i class="fas fa-save mr-2"></i>Save Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced EAR Chart with glass morphism -->
+        <div class="mt-8 bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+            <h3 class="text-lg font-semibold mb-4 flex items-center text-white">
+                <i class="fas fa-chart-area mr-2 text-green-400"></i>Eye Aspect Ratio Over Time
+            </h3>
+            <div style="height: 300px;">
+                <canvas id="earChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced calibration modal -->
+    <div id="calibrationModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl p-8 max-w-md w-full mx-4 border border-white/20 shadow-2xl">
+            <h3 class="text-xl font-semibold mb-4 text-center text-white">Calibration Mode</h3>
+            <div id="calibrationContent">
+                <p class="text-gray-300 mb-4 text-center">Keep your eyes open normally for 10 seconds to calibrate the system.</p>
+                <div class="w-full bg-white/20 rounded-full h-2 mb-4">
+                    <div id="calibrationProgress" class="bg-gradient-to-r from-cyan-500 to-blue-600 h-2 rounded-full transition-all duration-200" style="width: 0%"></div>
+                </div>
+                <p class="text-center text-sm text-gray-400">
+                    Progress: <span id="calibrationTime" class="text-cyan-400">0/10</span> seconds
+                </p>
+            </div>
+            <div class="flex justify-center mt-6">
+                <button id="cancelCalibrationBtn" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded transition-all duration-200 text-white border border-white/20">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/static/js/drowsiness-detector.js"></script>
+{% endblock %}

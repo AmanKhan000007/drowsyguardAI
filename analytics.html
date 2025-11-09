@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - AI Drowsiness Detection System{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block content %}
+<!-- Added animated background and enhanced analytics styling -->
+<div class="relative overflow-hidden min-h-screen">
+    <!-- Animated background elements -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-32 right-32 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-32 left-32 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 relative z-10">
+        <!-- Enhanced header with gradient text -->
+        <div class="text-center mb-8">
+            <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+                <i class="fas fa-chart-bar mr-3 text-blue-400"></i>Analytics Dashboard
+            </h1>
+            <p class="text-gray-300 text-lg">Comprehensive insights into your drowsiness patterns</p>
+        </div>
+
+        <!-- Enhanced summary cards with glass morphism -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl hover:bg-white/15 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm">Total Sessions</p>
+                        <p id="totalSessions" class="text-3xl font-bold text-blue-400">0</p>
+                    </div>
+                    <i class="fas fa-clock text-blue-400 text-3xl opacity-80"></i>
+                </div>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl hover:bg-white/15 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm">Avg Duration</p>
+                        <p id="avgDuration" class="text-3xl font-bold text-green-400">0m</p>
+                    </div>
+                    <i class="fas fa-stopwatch text-green-400 text-3xl opacity-80"></i>
+                </div>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl hover:bg-white/15 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm">Total Alerts</p>
+                        <p id="totalAlerts" class="text-3xl font-bold text-red-400">0</p>
+                    </div>
+                    <i class="fas fa-exclamation-triangle text-red-400 text-3xl opacity-80"></i>
+                </div>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl hover:bg-white/15 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm">Avg Score</p>
+                        <p id="avgScore" class="text-3xl font-bold text-yellow-400">0%</p>
+                    </div>
+                    <i class="fas fa-percentage text-yellow-400 text-3xl opacity-80"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced charts section with glass morphism -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Daily Sessions Chart -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+                <h3 class="text-lg font-semibold mb-4 flex items-center text-white">
+                    <i class="fas fa-calendar-day mr-2 text-blue-400"></i>Daily Sessions (Last 30 Days)
+                </h3>
+                <div style="height: 300px;">
+                    <canvas id="dailySessionsChart"></canvas>
+                </div>
+            </div>
+
+            <<!-- Drowsiness Score Trend -->
+<div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-lg font-semibold flex items-center text-white">
+      <i class="fas fa-chart-line mr-2 text-yellow-400"></i>Drowsiness Score Trend
+    </h3>
+
+    <!-- NEW controls -->
+    <div class="flex items-center space-x-2">
+      <label for="trendRange" class="text-xs text-gray-300">Range</label>
+      <select id="trendRange" class="bg-white/10 text-white text-xs px-2 py-1 rounded border border-white/20">
+        <option value="7">7d</option>
+        <option value="14">14d</option>
+        <option value="30" selected>30d</option>
+        <option value="90">90d</option>
+      </select>
+      <button id="trendRefreshBtn" class="bg-white/10 hover:bg-white/20 text-xs px-2 py-1 rounded border border-white/20 text-white">
+        <i class="fas fa-rotate"></i>
+      </button>
+    </div>
+  </div>
+
+  <div style="height: 300px;">
+    <canvas id="drowsinessChart"></canvas>
+  </div>
+</div>
+
+
+        <!-- Enhanced recent sessions table with glass morphism -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-xl">
+            <h3 class="text-lg font-semibold mb-4 flex items-center text-white">
+                <i class="fas fa-history mr-2 text-purple-400"></i>Recent Sessions
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-white/20">
+                            <th class="pb-3 text-gray-300 font-medium">Date</th>
+                            <th class="pb-3 text-gray-300 font-medium">Duration</th>
+                            <th class="pb-3 text-gray-300 font-medium">Alerts</th>
+                            <th class="pb-3 text-gray-300 font-medium">Avg EAR</th>
+                            <th class="pb-3 text-gray-300 font-medium">Score</th>
+                            <!-- <th class="pb-3 text-gray-300 font-medium">Actions</th> -->
+                        </tr>
+                    </thead>
+                    <tbody id="sessionsTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center text-gray-400 py-8">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>Loading sessions...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static_files', filename='js/analytics.js') }}"></script>
+
+
+{% endblock %}

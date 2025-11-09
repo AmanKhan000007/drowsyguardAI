@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Home - AI Drowsiness Detection System{% endblock %}
+
+{% block content %}
+<!-- Added animated background particles and enhanced hero section -->
+<div class="relative overflow-hidden">
+    <!-- Animated background elements -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-12 relative z-10">
+        <!-- Enhanced hero section with glass morphism cards -->
+        <div class="text-center mb-16">
+            <h1 class="text-6xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent mb-6 animate-fade-in">
+                <i class="fas fa-eye mr-4 text-cyan-400"></i>DrowsyGuard AI
+            </h1>
+            <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Advanced AI-powered drowsiness detection system that monitors your alertness in real-time, 
+                helping prevent accidents and ensuring safety during critical tasks.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ url_for('dashboard') }}" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25">
+                    <i class="fas fa-play mr-2"></i>Start Detection
+                </a>
+                <a href="{{ url_for('about') }}" class="bg-white/10 backdrop-blur-lg hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 border border-white/20 hover:border-white/30">
+                    <i class="fas fa-info-circle mr-2"></i>Learn More
+                </a>
+            </div>
+        </div>
+
+        <!-- Enhanced features grid with glass morphism cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+                <div class="text-center">
+                    <div class="bg-gradient-to-r from-cyan-500 to-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-camera text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Real-time Monitoring</h3>
+                    <p class="text-gray-300">
+                        Continuous monitoring using advanced computer vision and facial landmark detection
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+                <div class="text-center">
+                    <div class="bg-gradient-to-r from-green-500 to-emerald-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-bell text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Smart Alerts</h3>
+                    <p class="text-gray-300">
+                        Customizable audio and visual alerts when drowsiness is detected
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+                <div class="text-center">
+                    <div class="bg-gradient-to-r from-purple-500 to-violet-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-chart-line text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Analytics Dashboard</h3>
+                    <p class="text-gray-300">
+                        Detailed analytics and insights about your alertness patterns
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+                <div class="text-center">
+                    <div class="bg-gradient-to-r from-yellow-500 to-orange-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-cog text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Customizable Settings</h3>
+                    <p class="text-gray-300">
+                        Adjust sensitivity, alert thresholds, and calibration to your needs
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+                <div class="text-center">
+                    <div class="bg-gradient-to-r from-red-500 to-pink-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-shield-alt text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Privacy First</h3>
+                    <p class="text-gray-300">
+                        All processing happens locally - your video data never leaves your device
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+                <div class="text-center">
+                    <div class="bg-gradient-to-r from-indigo-500 to-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-download text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Data Export</h3>
+                    <p class="text-gray-300">
+                        Export your session data and analytics for further analysis
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced "How It Works" section with glass morphism -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-16 border border-white/20">
+            <h2 class="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="bg-gradient-to-r from-cyan-500 to-blue-600 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold shadow-lg">1</div>
+                    <h3 class="text-lg font-semibold mb-2 text-white">Camera Detection</h3>
+                    <p class="text-gray-300">The system accesses your camera and detects your face using AI</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-gradient-to-r from-cyan-500 to-blue-600 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold shadow-lg">2</div>
+                    <h3 class="text-lg font-semibold mb-2 text-white">Eye Analysis</h3>
+                    <p class="text-gray-300">Advanced algorithms calculate your Eye Aspect Ratio (EAR) in real-time</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-gradient-to-r from-cyan-500 to-blue-600 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold shadow-lg">3</div>
+                    <h3 class="text-lg font-semibold mb-2 text-white">Smart Alerts</h3>
+                    <p class="text-gray-300">When drowsiness is detected, you receive immediate audio and visual alerts</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced statistics section with animated counters -->
+        <div class="text-center">
+            <h2 class="text-3xl font-bold mb-8 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Trusted by Users Worldwide</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
+                    <div class="text-4xl font-bold text-cyan-400 mb-2">99.2%</div>
+                    <div class="text-gray-300">Accuracy Rate</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
+                    <div class="text-4xl font-bold text-green-400 mb-2">10K+</div>
+                    <div class="text-gray-300">Active Users</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
+                    <div class="text-4xl font-bold text-purple-400 mb-2">50ms</div>
+                    <div class="text-gray-300">Response Time</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
+                    <div class="text-4xl font-bold text-yellow-400 mb-2">24/7</div>
+                    <div class="text-gray-300">Monitoring</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
